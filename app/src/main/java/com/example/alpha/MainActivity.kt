@@ -30,6 +30,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// 브랜치 테스트
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
