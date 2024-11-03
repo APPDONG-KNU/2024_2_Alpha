@@ -10,6 +10,9 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -54,5 +57,20 @@ fun AlphaTheme(
         colorScheme = colorScheme,
         typography = Typography,
         content = content
+    )
+}
+
+object TextStyles {
+    val LargeText = TextStyle(
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Bold
+    )
+    val SmallText = TextStyle(
+        fontSize = 12.sp,
+        fontWeight = FontWeight.Normal
+    )
+    val MiddleText = TextStyle(
+        fontSize = 16.sp,
+        fontWeight = FontWeight.Normal
     )
 }
