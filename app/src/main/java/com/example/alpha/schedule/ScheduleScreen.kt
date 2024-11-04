@@ -2,30 +2,26 @@ package com.example.alpha.schedule
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.alpha.R
@@ -34,6 +30,7 @@ import com.example.alpha.data.model.dummySchedules
 
 @Composable
 fun ScheduleScreen() {
+    val dummies =
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -67,37 +64,16 @@ fun ScheduleCard(
                 painter = painterResource(id = R.drawable.ic_launcher_background),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape),
+                    .height(100.dp),
                 contentScale = ContentScale.Crop
             )
-            Column(
-                modifier = Modifier.padding(start = 16.dp)
-            ) {
-                Text(
-                    schedule.title,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                Row(
-                    modifier = Modifier,
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = schedule.location + " · ",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Text(
-                        text = schedule.date,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
+            Column {
+                Text(schedule.title, style = MaterialTheme.typography.titleSmall)
+                Text(schedule.content, style = MaterialTheme.typography.bodyMedium)
             }
         }
     }
 }
-
 @Preview
 @Composable
 fun ScheduleCardPreview() {
