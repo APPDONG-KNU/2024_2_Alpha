@@ -2,6 +2,7 @@ package com.example.alpha.feed
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,9 +29,10 @@ import com.example.alpha.R
 @Preview(showBackground = true)
 @Composable
 fun FeedList() {
+
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = Modifier.fillMaxSize()
+            .background(Color.Gray)
     ) {
         items(20) { index ->
             ListItem(index)
@@ -42,41 +45,58 @@ fun ListItem(index: Int) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
-        shape = RoundedCornerShape(8.dp)
+            .padding(0.dp, 8.dp, 0.dp, 0.dp),
+        shape = RoundedCornerShape(0.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+        Column() {
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(8.dp, 8.dp, 8.dp, 0.dp),
+                verticalAlignment = Alignment.CenterVertically) {
                 CircleAvatar()
                 Spacer(modifier = Modifier.width(8.dp))
                 Column {
-                    Text("김무성", fontWeight = FontWeight.Bold)
-                    Text("2024.09.28 (토) 22:50", fontSize = 12.sp, color = Color.Gray)
+                    Text("김무성", fontWeight = FontWeight.Bold) // TODO 이름 데이터
+                    Text("2024.09.28 (토) 22:50", fontSize = 12.sp, color = Color.Gray) // TODO 날짜 데이터
                 }
                 Spacer(modifier = Modifier.weight(1f))
-                IconButton(onClick = { /* TODO: Handle click */ }) {
-                    Icon(Icons.Default.MoreVert, contentDescription = "더보기 옵션")
-                }
+                Image(
+                    painter = painterResource(id = R.drawable.baseline_more_horiz_24),
+                    contentDescription = "더보기 옵션",
+                    modifier = Modifier
+                        .size(24.dp)
+                        .align(Alignment.Top)
+                        .clickable {
+                            // TODO 클릭 이벤트
+                        }
+                )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = "안드로이드는 구글(Google)에서 개발한 운영체제로, 주로 스마트폰과 태블릿에서 사용됩니다. 리눅스 커널을 기반으로 하며...",
-                fontSize = 14.sp
+                fontSize = 14.sp,
+                modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Image(
-                painter = painterResource(id = R.drawable.baseline_image_24),
-                contentDescription = "Android Image",
+            BoxWithConstraints(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(180.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                contentScale = ContentScale.Crop
-            )
+                    .aspectRatio(1f)
+            ) {
+                val imageSize = maxWidth.coerceAtMost(maxHeight)
+                Image(
+                    painter = painterResource(id = R.drawable.baseline_image_24), // TODO 이미지 데이터
+                    contentDescription = "Image",
+                    modifier = Modifier
+                        .size(imageSize),
+                    contentScale = ContentScale.Crop
+                )
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -84,18 +104,43 @@ fun ListItem(index: Int) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row {
-                    IconButton(onClick = { /* TODO: Handle like */ }) {
-                        Icon(Icons.Default.FavoriteBorder, contentDescription = "좋아요")
-                    }
+                Row(
+                    modifier = Modifier.weight(1f),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.baseline_favorite_border_24),
+                        contentDescription = "좋아요",
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable {
+                                // TODO: Handle like
+                            }
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text("좋아요")
-                    Spacer(modifier = Modifier.width(16.dp))
-                    IconButton(onClick = { /* TODO: Handle comment */ }) {
-                        Icon(Icons.Default.Comment, contentDescription = "댓글 달기")
-                    }
+                }
+                Row(
+                    modifier = Modifier.weight(1f),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.baseline_comment_24),
+                        contentDescription = "댓글 달기",
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable {
+                                // TODO: Handle like
+                            }
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text("댓글 달기")
                 }
             }
+
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
@@ -104,7 +149,7 @@ fun ListItem(index: Int) {
 fun CircleAvatar() {
     Box(
         modifier = Modifier
-            .size(40.dp)
+            .size(48.dp)
             .background(Color.Gray, shape = CircleShape)
     )
 }
