@@ -5,19 +5,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Comment
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -25,23 +21,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.alpha.R
+import com.example.alpha.data.model.Feed
 
 @Preview(showBackground = true)
 @Composable
 fun FeedList() {
+    val feedList = remember { dummyFeedList }
 
     LazyColumn(
         modifier = Modifier.fillMaxSize()
             .background(Color.Gray)
     ) {
-        items(20) { index ->
-            ListItem(index)
+        items(feedList) { feed ->
+            ListItem(feed)
         }
     }
 }
 
 @Composable
-fun ListItem(index: Int) {
+fun ListItem(feed : Feed) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -57,8 +55,8 @@ fun ListItem(index: Int) {
                 CircleAvatar()
                 Spacer(modifier = Modifier.width(8.dp))
                 Column {
-                    Text("김무성", fontWeight = FontWeight.Bold) // TODO 이름 데이터
-                    Text("2024.09.28 (토) 22:50", fontSize = 12.sp, color = Color.Gray) // TODO 날짜 데이터
+                    Text(feed.userId ?: "알 수 없음", fontWeight = FontWeight.Bold) // TODO 이름 데이터
+                    Text(feed.date ?: "알 수 없음", fontSize = 12.sp, color = Color.Gray) // TODO 날짜 데이터
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 Image(
@@ -76,7 +74,7 @@ fun ListItem(index: Int) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "안드로이드는 구글(Google)에서 개발한 운영체제로, 주로 스마트폰과 태블릿에서 사용됩니다. 리눅스 커널을 기반으로 하며...",
+                text = feed.text ?: "",
                 fontSize = 14.sp,
                 modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp)
             )
