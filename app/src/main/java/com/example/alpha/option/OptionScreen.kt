@@ -46,6 +46,7 @@ import com.example.alpha.ui.theme.TextStyles
 fun OptionScreen( ){
     AlphaTheme {
         Column {
+            Spacer(modifier = Modifier.height(16.dp))
             Info(name = "이성호", enter = "앱동 24-2", message = "상태메시지를 추가해 주세요")
             Spacer(modifier = Modifier.height(16.dp))
             ListButton(name = "프로필", items = Profile)
@@ -60,23 +61,12 @@ fun OptionScreen( ){
 
 @Preview(showBackground = true)
 @Composable
-fun List_btnPreview() {
-    AlphaTheme {
-        Column {
-            Info(name = "이성호", enter = "앱동 24-2", message = "상태메시지를 추가해 주세요")
-            Spacer(modifier = Modifier.height(16.dp))
-            ListButton(name = "프로필", items = Profile)
-            Spacer(modifier = Modifier.height(16.dp))
-            ListButton(name = "내가 쓴 게시물", items = PostManagement)
-            Spacer(modifier = Modifier.height(16.dp))
-            ListButton(name = "기타", items = etc)
-        }
-    }
+fun Preview_OptionScreen() {
+    OptionScreen()
 }
 
 @Composable
 fun Info(name : String, enter : String, message : String){
-
     @Composable
     fun CustomTextField(
         defaultmessage: String,
