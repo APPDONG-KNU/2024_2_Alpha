@@ -43,10 +43,17 @@ import com.example.alpha.ui.theme.AlphaTheme
 import com.example.alpha.ui.theme.TextStyles
 
 @Composable
-fun StartScreen(){
-    Column (//modifier = Modifier.padding(top = 50.dp)
-    ){
-        List_btnPreview()
+fun OptionScreen( ){
+    AlphaTheme {
+        Column {
+            Info(name = "이성호", enter = "앱동 24-2", message = "상태메시지를 추가해 주세요")
+            Spacer(modifier = Modifier.height(16.dp))
+            ListButton(name = "프로필", items = Profile)
+            Spacer(modifier = Modifier.height(16.dp))
+            ListButton(name = "내가 쓴 게시물", items = PostManagement)
+            Spacer(modifier = Modifier.height(16.dp))
+            ListButton(name = "기타", items = etc)
+        }
     }
 }
 
