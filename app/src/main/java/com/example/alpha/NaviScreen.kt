@@ -29,7 +29,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.alpha.feed.FeedList
 import com.example.alpha.option.OptionScreen
+import com.example.alpha.option.OptionUiState
 
 // Bottom Navigation Destinations Enum
 enum class BottomNavScreen(val title: String, @DrawableRes val icon: Int) {
@@ -123,7 +125,7 @@ fun NavigationGraph(navController: NavHostController, contentPadding: androidx.c
             ScreenContent("일정 화면")
         }
         composable(BottomNavScreen.Board.name) {
-            ScreenContent("게시판 화면")
+            FeedList()
         }
         composable(BottomNavScreen.MyPage.name) {
             OptionScreen()

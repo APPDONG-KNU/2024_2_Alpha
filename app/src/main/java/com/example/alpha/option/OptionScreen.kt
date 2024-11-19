@@ -14,14 +14,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,33 +35,126 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.alpha.R
 import com.example.alpha.ui.theme.AlphaTheme
 import com.example.alpha.ui.theme.TextStyles
 
 @Composable
 fun OptionScreen( ){
+    val viewModel: OptionViewModel = viewModel()
+    val OptionUiState =viewModel.uiState.collectAsState().value
+    OptionMainScreen(
+        optionUiState = OptionUiState,
+        onButtonPressed = {name: String->
+            viewModel.updateDetailsScreenStates(name)
+        },
+        onBackPressed = {
+            viewModel.resetHomeScreenStates()
+        }
+    )
+}
+
+@Composable
+fun OptionMainScreen(
+    optionUiState: OptionUiState,
+    onButtonPressed: (String) -> Unit,
+    onBackPressed: () -> Unit
+){
     AlphaTheme {
         Column {
             Spacer(modifier = Modifier.height(16.dp))
-            Info(name = "이성호", enter = "앱동 24-2", message = "상태메시지를 추가해 주세요")
+            Info(optionUiState.UserInfo)
             Spacer(modifier = Modifier.height(16.dp))
-            ListButton(name = "프로필", items = Profile)
+            ListButton(name = "프로필", items = optionUiState.Profile, onButtonPressed)
             Spacer(modifier = Modifier.height(16.dp))
-            ListButton(name = "내가 쓴 게시물", items = PostManagement)
+            ListButton(name = "내가 쓴 게시물", items = optionUiState.PostManagement, onButtonPressed)
             Spacer(modifier = Modifier.height(16.dp))
-            ListButton(name = "기타", items = etc)
+            ListButton(name = "기타", items = optionUiState.etc, onButtonPressed)
+        }
+        if(optionUiState.isShowingOptionpage){
+
+        }
+        else{
+            when(optionUiState.currentSelectedInfo){
+                "로그아웃"->LogoutScreen(onBackPressed)
+            }
         }
     }
 }
 
-
+@Composable
+fun LogoutScreen (
+    onBackPressed: () -> Unit
+){
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.5f)), // 반투명한 배경색 설정
+        contentAlignment = Alignment.Center
+    ) {
+        Column (
+            modifier = Modifier
+                .height(100.dp)
+                .width(200.dp)
+                .background(Color.White, shape = RoundedCornerShape(8.dp))
+        ){
+            Text(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1.5f)
+                    .wrapContentSize(Alignment.Center),
+                text = "로그아웃하시겠습니까",
+                style = TextStyles.MiddleText
+            )
+            Row (
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+            ){
+                Button(
+                    onClick = {},
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f),
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White,
+                        contentColor = Color.Black
+                    )
+                ) {
+                    Text(
+                        text = "예",
+                        style = TextStyles.MiddleText
+                    )
+                }
+                Button(
+                    onClick = {onBackPressed()},
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f),
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White,
+                        contentColor = Color.Black
+                    )
+                ) {
+                    Text(
+                        text = "아니요",
+                        style = TextStyles.MiddleText
+                    )
+                }
+            }
+        }
+    }
+}
 @Preview(showBackground = true)
 @Composable
 fun Preview_OptionScreen() {
@@ -66,7 +162,7 @@ fun Preview_OptionScreen() {
 }
 
 @Composable
-fun Info(name : String, enter : String, message : String){
+fun Info(UserInfo : UserInfo){
     @Composable
     fun CustomTextField(
         defaultmessage: String,
@@ -139,19 +235,19 @@ fun Info(name : String, enter : String, message : String){
 
         ){
             Text(
-                text = name,
+                text = UserInfo.Name,
                 modifier = Modifier
                     .fillMaxWidth(),
                 style = TextStyles.LargeText
             )
             Text(
-                text = enter,
+                text = UserInfo.enter,
                 modifier = Modifier
                     .fillMaxWidth(),
                 style = TextStyles.SmallText
             )
             CustomTextField(
-                defaultmessage = message,
+                defaultmessage = UserInfo.message,
                 value = textState,
                 onValueChange = { newValue ->
                     textState = newValue // 사용자가 입력한 값을 상태에 반영
@@ -163,7 +259,13 @@ fun Info(name : String, enter : String, message : String){
 }
 
 @Composable
-fun ListButton(name : String, items: List<String>, modifier: Modifier = Modifier){
+fun ListButton(
+    name : String,
+    items: List<String>,
+    onButtonPressed : (String) ->Unit,
+    modifier: Modifier = Modifier
+){
+    val viewModel: OptionViewModel = viewModel()
 
     @Composable
     fun UnderlinedColumn(content: @Composable () -> Unit) {
@@ -199,7 +301,10 @@ fun ListButton(name : String, items: List<String>, modifier: Modifier = Modifier
         }
         UnderlinedColumn{
             items.forEach { item ->
-                OptionButton(name = item, modifier = Modifier)
+                OptionButton(name = item,
+                    modifier = Modifier,
+                    onButtonPressed = onButtonPressed
+                )
             }
             Spacer(modifier = Modifier.height(1.dp)) // 하단에 공간 확보
         }
@@ -207,12 +312,16 @@ fun ListButton(name : String, items: List<String>, modifier: Modifier = Modifier
 }
 
 @Composable
-fun OptionButton(name: String, modifier: Modifier) {
+fun OptionButton(
+    name: String,
+    modifier: Modifier,
+    onButtonPressed : (String) ->Unit
+) {
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
         Button(
-            onClick = { },
+            onClick = { onButtonPressed(name) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
@@ -253,18 +362,3 @@ fun OptionButton(name: String, modifier: Modifier) {
         }
     }
 }
-
-val Profile = listOf(
-    "이메일 변경",
-    "내 생일 표시"
-)
-val PostManagement = listOf(
-    "내가 쓴 게시물",
-    "댓글 단 게시물",
-    "좋아요 누른 게시물"
-)
-val etc = listOf(
-    "로그아웃",
-    "문의하기",
-    "탈퇴하기"
-)
