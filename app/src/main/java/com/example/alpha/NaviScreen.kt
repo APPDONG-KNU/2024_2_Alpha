@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.*
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -29,6 +30,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.alpha.feed.FeedList
 import com.example.alpha.option.OptionScreen
 
 // Bottom Navigation Destinations Enum
@@ -123,7 +125,7 @@ fun NavigationGraph(navController: NavHostController, contentPadding: androidx.c
             ScreenContent("일정 화면")
         }
         composable(BottomNavScreen.Board.name) {
-            ScreenContent("게시판 화면")
+            FeedList()
         }
         composable(BottomNavScreen.MyPage.name) {
             OptionScreen()
