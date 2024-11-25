@@ -29,17 +29,18 @@ fun FeedList() {
     val feedList = remember { dummyFeedList }
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .background(Color.Gray)
     ) {
         items(feedList) { feed ->
-            ListItem(feed)
+            FeedListItem(feed)
         }
     }
 }
 
 @Composable
-fun ListItem(feed : Feed) {
+fun FeedListItem(feed: Feed) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,9 +50,11 @@ fun ListItem(feed : Feed) {
     ) {
         Column() {
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(8.dp, 8.dp, 8.dp, 0.dp),
-                verticalAlignment = Alignment.CenterVertically) {
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 CircleAvatar()
                 Spacer(modifier = Modifier.width(8.dp))
                 Column {
